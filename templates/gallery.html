@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+      /* main color - #e60124 */
+      /* dark main - #780000 */
+
+      :root {
+        --card_width: 250px;
+        --card_border_radius: 16px;
+        --row_increment: 10px;
+        --card_small: 26;
+        --card_medium: 33;
+        --card_large: 45;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        position: relative;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px;
+      }
+      .username_nd_icon {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+      }
+
+      .profile_pic {
+        width: 36px;
+        height: 36px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 250px;
+        overflow: auto;
+        align-items: center;
+        top: 60px;
+        right: 10px;
+        border-radius: 8px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        color: black;
+        padding: 8px 24px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown-content :hover {
+        background-color: #cbcbcb;
+        cursor: pointer;
+      }
+
+      .user-details-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 24px;
+      }
+      .user-details {
+        font-weight: normal;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .image_container {
+        margin: 10px;
+        display: grid;
+        max-width: 1200px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        margin: 0 auto;
+        padding: 5px;
+        gap: 10px;
+        position: relative;
+      }
+      .card {
+        width: 100%;
+      }
+
+      .card:nth-child(odd) {
+        grid-row-end: span var(--card_small);
+      }
+      .card:nth-child(even) {
+        grid-row-end: span var(--card_medium);
+      }
+    
+
+      .card img {
+        border-radius: var(--card_border_radius);
+        object-fit: cover;
+        max-width: 100%;
+        height: 100%;
+      }
+      .addIcon {
+        background-color: #e60124;
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .addIcon:hover {
+        transform: scale(1.5);
+      }
+
+      /* Modal Styles */
+      .addmodal {
+        display: none;
+        position: fixed;
+        right: 20px;
+        bottom: 80px;
+        width: 350px;
+        height: 250px;
+      }
+
+      .addmodal-content {
+        background-color: #fefefe;
+        padding: 20px;
+
+        border-radius: 10px;
+        max-width: 400px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.54);
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+      }
+      .uploadbtn {
+        width: 100%;
+        background-color: #e60124;
+        border: none;
+        color: white;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .uploadbtn:hover {
+        background-color: #780000;
+      }
+
+      .uploadInputBox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        align-self: flex-end;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav">
+        <img src="assets/Pinterest-Logo.png" alt="" width="100" height="auto" />
+        <div class="username_nd_icon" onclick="openDropDown()">
+          <img class="profile_pic" src="assets/p9.jpeg" alt="" />
+          <p>username</p>
+
+          <i class="fa-solid fa-caret-down"></i>
+        </div>
+      </div>
+    </nav>
+    <div id="dropDownModal" class="dropdown-content">
+      <div class="user-details-container">
+        <img class="profile_pic" src="assets/p9.jpeg" alt="" />
+        <div class="user-details">
+          <p>username</p>
+          <p style="color: #7b7a7a">user@gmail.com</p>
+        </div>
+        <div>
+          <i class="fa-solid fa-check"></i>
+        </div>
+      </div>
+      <div class="dropdown-item"><p>Settings</p></div>
+      <div class="dropdown-item"><p>Logout</p></div>
+    </div>
+    <div class="image_container">
+      <div class="addIcon" onclick="addImage()">
+        <i class="fa-solid fa-plus" style="color: white"></i>
+      </div>
+      <div class="card">
+        <img src="/assets/shoe.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/testimg.webp" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/averie-woodard-Av_NirIguEc-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/ben-o-bro-C5XyLljkMrY-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/deniz-altindas-t1XLQvDqt_4-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/diego-ph-fIq0tET6llw-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/efe-kurnaz-RnCPiXixooY-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/joshua-earle-ICE__bo2Vws-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/malak-kassem-QCvvpyKl0jc-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/ryan-riggins-kBJEJqWNtNY-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/thanos-amoutzias-OUkTOfnBc3Q-unsplash.jpg" alt="" />
+      </div>
+
+      <div class="card">
+        <img src="/assets/testimg.webp" alt="" />
+      </div>
+      <div id="addImageModal" class="addmodal">
+        <div class="addmodal-content">
+          <span class="close">&times;</span>
+          <!-- Add your modal content here -->
+          <p>Upload Image</p>
+          <div class="uploadInputBox">
+            <input
+              type="file"
+              id="imageInput"
+              accept="image/*"
+              class="form-control"
+            />
+          </div>
+          <button onclick="uploadImage()" class="uploadbtn">Upload</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      function addImage() {
+        console.log("adding image..");
+        var modal = document.getElementById("addImageModal");
+        modal.style.display = "flex";
+
+        var closeBtn = document.getElementsByClassName("close")[0];
+        closeBtn.onclick = function () {
+          modal.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
+      }
+
+      function openDropDown() {
+        var modal = document.getElementById("dropDownModal");
+        if (modal.style.display === "block") {
+          modal.style.display = "none";
+        } else {
+          modal.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>
