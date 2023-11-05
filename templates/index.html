@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>home</title>
 
     <link
       rel="stylesheet"
@@ -17,6 +17,7 @@
     <style>
       /* main color - #e60124 */
       /* dark main - #780000 */
+      /* background - #344e41 */
       :root {
         --card_width: 250px;
         --card_border_radius: 16px;
@@ -31,15 +32,15 @@
         box-sizing: border-box;
       }
       body {
+        background-color: #344e41;
         font-family: Arial, Helvetica, sans-serif;
         position: relative;
       }
       nav {
         position: sticky;
         top: 0;
-        background-color: white; /* Change the background color as needed */
-        padding: 5px;
-        z-index: 100;
+        background-color: white;
+        z-index: 1;
       }
       .nav {
         display: flex;
@@ -66,7 +67,7 @@
 
       .dropdown-content {
         display: none;
-        position: absolute;
+        position: fixed;
         background-color: #f1f1f1;
         min-width: 250px;
         overflow: auto;
@@ -75,7 +76,7 @@
         right: 10px;
         border-radius: 8px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
+        z-index: 2;
       }
 
       .dropdown-item {
@@ -105,11 +106,10 @@
         gap: 5px;
       }
       .image_container {
-        margin: 10px;
         display: grid;
         max-width: 1200px;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        margin: 0 auto;
+        margin: 0px auto;
         padding: 5px;
         gap: 10px;
         position: relative;
@@ -134,20 +134,40 @@
       .addIcon {
         background-color: #e60124;
         box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        right: 60px;
         cursor: pointer;
         transition: transform 0.3s;
       }
 
       .addIcon:hover {
+        transform: scale(1.5);
+      }
+
+      .bookmarkIcon {
+        background-color: #e60124;
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 20px;
+        right: 10px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .bookmarkIcon:hover {
         transform: scale(1.5);
       }
 
@@ -258,6 +278,9 @@
     <div class="image_container">
       <div class="addIcon" onclick="addImage()">
         <i class="fa-solid fa-plus" style="color: white"></i>
+      </div>
+      <div class="bookmarkIcon" onclick="addImage()">
+        <i class="fa-regular fa-bookmark" style="color: white"></i>
       </div>
       {% for image in images %}
       <div class="card">
