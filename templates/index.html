@@ -14,10 +14,20 @@
       referrerpolicy="no-referrer"
     />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&family=Rubik:ital,wght@0,600;0,700;1,500&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       /* main color - #e60124 */
       /* dark main - #780000 */
       /* background - #344e41 */
+      /* secondary - #588157 */
+      /* secondary2 - #ee9b00 */
+
       :root {
         --card_width: 250px;
         --card_border_radius: 16px;
@@ -50,6 +60,12 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 10px;
+      }
+      .logo {
+        color: #e60124;
+        font-weight: bold;
+        font-family: "Itim", cursive;
+        font-size: 24px;
       }
       .username_nd_icon {
         display: flex;
@@ -239,12 +255,13 @@
   <body>
     <nav>
       <div class="nav">
-        <img
+        <!-- <img
           src="{% static 'assets/logo/Pinterest-Logo.png' %}"
           alt=""
           width="100"
           height="auto"
-        />
+        /> -->
+        <p class="logo">picPlus+</p>
         <div class="username_nd_icon" onclick="openDropDown()">
           <img
             class="profile_pic"

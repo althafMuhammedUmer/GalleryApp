@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Register</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,7 +32,8 @@
       .card {
         width: 600px;
         background-color: white;
-        height: 530px;
+        min-height: 580px;
+        padding-bottom: 26px;
         border-radius: 16px;
       }
       .card-head {
@@ -44,6 +45,7 @@
       }
       .card-head p {
         font-weight: bold;
+        font-size: 16px;
       }
 
       .logo {
@@ -56,8 +58,8 @@
         width: 380px;
         margin: 0 auto;
       }
-      
-      .form-item{
+
+      .form-item {
         display: flex;
         justify-content: center;
       }
@@ -68,15 +70,8 @@
         padding: 12px;
         border: 2px solid #e60124;
         border-radius: 8px;
-
       }
-      .forgot-password-text{
-        display: flex;
-        justify-content: end;
-        font-size: 14px;
-        color: #ee9b00;
-        cursor: pointer;
-      }
+      
       .btn {
         width: 100%;
         margin-top: 20px;
@@ -87,26 +82,25 @@
         border-radius: 8px;
         cursor: pointer;
       }
-      .btn:hover{
+      .btn:hover {
         background-color: #780000;
-
       }
 
-      .footer-text{
+      .footer-text {
         margin-top: 60px;
         font-size: 14px;
       }
-      .registerbtn{
+      .loginbtn {
         color: #ee9b00;
         font-size: 16px;
         margin-left: 5px;
         text-decoration: none;
         cursor: pointer;
       }
-      .forgot-password-text:hover{
+      .forgot-password-text:hover {
         color: #344e41;
       }
-      .registerbtn:hover{
+      .registerbtn:hover {
         color: #344e41;
       }
     </style>
@@ -116,7 +110,7 @@
       <div class="card">
         <div class="card-head">
           <h2 class="logo">picPlus+</h2>
-          <p>Login</p>
+          <p>Register</p>
         </div>
         <div class="card-body">
           <form action="">
@@ -125,14 +119,25 @@
                 <input type="text" placeholder="Email" class="form-control" />
               </div>
               <div class="form-item">
-                <input type="password" placeholder="Password" class="form-control" />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  class="form-control"
+                />
               </div>
-              <div class="forgot-password-text">
-                <p>Forgot Password</p>
+              <div class="form-item">
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  class="form-control"
+                />
               </div>
               <button class="btn">Login</button>
               <div class="footer-text">
-                <p>Dont have an account ? <a class="registerbtn" href="/register"> Register</a></p>
+                <p>
+                  Already have an account ?
+                  <a class="loginbtn" href="/login"> Login</a>
+                </p>
               </div>
             </div>
           </form>
