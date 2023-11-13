@@ -68,10 +68,12 @@
         margin: 0 auto 30px;
         outline: 0;
         padding: 12px;
-        border: 2px solid #e60124;
         border-radius: 8px;
       }
-      
+      .form-control:focus {
+        border: 2px solid #e60124;
+      }
+
       .btn {
         width: 100%;
         margin-top: 20px;
@@ -103,6 +105,11 @@
       .registerbtn:hover {
         color: #344e41;
       }
+      .message{
+        margin-bottom: 10px;
+        color: #ee9b00;
+
+      }
     </style>
   </head>
   <body>
@@ -110,19 +117,36 @@
       <div class="card">
         <div class="card-head">
           <h2 class="logo">picPlus+</h2>
-          <p>Register</p>
         </div>
         <div class="card-body">
-          <form action="">
+          {% for message in messages %}
+          <p class="message" id="message">{{message}}</p>
+          {% endfor %}
+          <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
             <div class="form-contianer">
               <div class="form-item">
-                <input type="text" placeholder="Email" class="form-control" />
+                <input
+                  type="text"
+                  placeholder="username"
+                  class="form-control"
+                  name="username"
+                />
+              </div>
+              <div class="form-item">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  class="form-control"
+                  name="email"
+                />
               </div>
               <div class="form-item">
                 <input
                   type="password"
                   placeholder="Password"
                   class="form-control"
+                  name="password"
                 />
               </div>
               <div class="form-item">
@@ -130,9 +154,10 @@
                   type="password"
                   placeholder="Confirm Password"
                   class="form-control"
+                  name="confirm_password"
                 />
               </div>
-              <button class="btn">Login</button>
+              <button class="btn" type="submit">Register</button>
               <div class="footer-text">
                 <p>
                   Already have an account ?
@@ -144,5 +169,12 @@
         </div>
       </div>
     </div>
+    <script>
+      var messageDiv = document.getElementById('message')
+      function hideMessage(){
+        messageDiv.style.display = 'none'
+      }
+      setTimeout(hideMessage, 3000)
+    </script>
   </body>
 </html>
