@@ -14,6 +14,7 @@
     width: 100%;
     transition: transform 0.3s;
     position: relative;
+    color: white;
   }
 
   .card:nth-child(odd) {
@@ -197,6 +198,7 @@
     </div>
     <div class="bookmarkIcon2" data-post-id="{{post.id}}">
       <i class="fa-regular fa-bookmark" style="color: white"></i>
+      <p style="margin-left: 10px;">{{post.saved_by.count}}</p>
     </div>
   </div>
   {% endfor %}
@@ -315,6 +317,11 @@
         },
       });
     });
+
+    
+
+
+    
   });
 </script>
 

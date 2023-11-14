@@ -13,6 +13,13 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+def bookmarkpage(request):
+    mybookmarks = Bookmark.objects.filter(user=request.user)
+    context = {
+        "mybookmarks": mybookmarks
+    }
+    return render(request, 'bookmark.html', context)
+
 @login_required(login_url='user_login')
 def create_post(request):
     if request.method == "POST":
@@ -45,6 +52,7 @@ def create_post(request):
 def bookmark_post(request, post_id):
     try:
         post = get_object_or_404(Post, id=post_id)
+        user = request.user
 
         existing_bookmark = Bookmark.objects.filter(user=request.user, post=post).first()
 
@@ -55,6 +63,8 @@ def bookmark_post(request, post_id):
             )
             bookmark.save()
 
+            post.saved_by.add(user)
+
             return JsonResponse({'message' : 'Post saved successfully.'})
         
         else:
@@ -64,10 +74,24 @@ def bookmark_post(request, post_id):
     except Exception as e:
         return JsonResponse({'error': f'Error bookmarking post: {str(e)}'}, status=500)
     
-def bookmarkpage(request):
-    mybookmarks = Bookmark.objects.filter(user=request.user)
-    context = {
-        "mybookmarks": mybookmarks
-    }
-    return render(request, 'bookmark.html', context)
+
+def toggle_like(request, post_id):
+    post = get_object_or_404(Post, pk=id)
+    user = request.user
+
+    if user in post.liked_by.all():
+        post.liked_by.remove(user)
+        is_liked = False
+    
+    else:
+        post.liked_by.add(user)
+        is_liked = True
+    
+    likes_count = post.liked_by.count()
+
+    return JsonResponse({'is_liked': is_liked, "likes_count": likes_count})
+    
+
+
+
 
