@@ -1,0 +1,34 @@
+{% load static %}
+<nav>
+  <div class="nav">
+    <a class="logo" href="/">picPlus+</a>
+    <div class="username_nd_icon" onclick="openDropDown()">
+      <img
+        class="profile_pic"
+        src="{% static 'assets/profilepic/p9.jpeg' %}"
+        alt=""
+      />
+      <p>{{user.username}}</p>
+
+      <i class="fa-solid fa-caret-down"></i>
+    </div>
+  </div>
+</nav>
+<div id="dropDownModal" class="dropdown-content">
+  <div class="user-details-container">
+    <img
+      class="profile_pic"
+      src="{% static 'assets/profilepic/p9.jpeg' %}"
+      alt=""
+    />
+    <div class="user-details">
+      <p>{{user.username}}</p>
+      <p style="color: #7b7a7a">{{user.email}}</p>
+    </div>
+    <div>
+      <i class="fa-solid fa-check"></i>
+    </div>
+  </div>
+  <div class="dropdown-item"><p>Settings</p></div>
+  <a href="{% url 'user_logout' %}" class="dropdown-item"><p>Logout</p></a>
+</div>

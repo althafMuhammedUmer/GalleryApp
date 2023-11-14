@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Bookmark 
+{% endblock %} {% block custom_style %}
+<style>
+  :root {
+    --card_width: 250px;
+    --card_border_radius: 16px;
+    --row_increment: 10px;
+    --card_small: 26;
+    --card_medium: 33;
+    --card_large: 45;
+  }
+  .card_container {
+    display: grid;
+    width: 1200px;
+    min-height: 100vh;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .card-heading {
+    text-align: center;
+    grid-column: 1 / span 5;
+    align-self: center;
+    
+    padding: 10px;
+    font-size: 28px;
+  }
+  .card {
+    width: 100%;
+    transition: transform 0.3s;
+    position: relative;
+  }
+
+  .card img {
+    border-radius: var(--card_border_radius);
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+{% endblock %} {% block body %}
+<!-- nav -->
+{% include 'includes/navbar.html' %}
+<div class="card_container">
+  <div class="card-heading">Saved</div>
+  {% for mybookmark in mybookmarks %}
+  <div class="card">
+    <img src="{{mybookmark.post.image.url}}" alt="" />
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

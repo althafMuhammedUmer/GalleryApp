@@ -1,15 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Post, Tag
+from .models import Post, Tag, Bookmark
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 # Create your views here.
 @login_required(login_url='user_login')
 def index(request):
-    gallery = Post.objects.all()
+    posts = Post.objects.all()
     context = {
-        "images": gallery
+        "posts": posts
     }
     return render(request, 'index.html', context)
 
@@ -40,3 +40,34 @@ def create_post(request):
     
     else:
         return JsonResponse({'message':'something went wrong.'}) 
+
+@login_required(login_url='user_login')
+def bookmark_post(request, post_id):
+    try:
+        post = get_object_or_404(Post, id=post_id)
+
+        existing_bookmark = Bookmark.objects.filter(user=request.user, post=post).first()
+
+        if not existing_bookmark:
+            bookmark = Bookmark.objects.create(
+                user=request.user,
+                post=post
+            )
+            bookmark.save()
+
+            return JsonResponse({'message' : 'Post saved successfully.'})
+        
+        else:
+            existing_bookmark.delete()
+            return JsonResponse({'message': 'Bookmark removed successfully.'})
+        
+    except Exception as e:
+        return JsonResponse({'error': f'Error bookmarking post: {str(e)}'}, status=500)
+    
+def bookmarkpage(request):
+    mybookmarks = Bookmark.objects.filter(user=request.user)
+    context = {
+        "mybookmarks": mybookmarks
+    }
+    return render(request, 'bookmark.html', context)
+
