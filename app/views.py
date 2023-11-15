@@ -69,6 +69,7 @@ def bookmark_post(request, post_id):
         
         else:
             existing_bookmark.delete()
+            post.saved_by.remove(user)
             return JsonResponse({'message': 'Bookmark removed successfully.'})
         
     except Exception as e:

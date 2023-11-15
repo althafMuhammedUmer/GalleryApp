@@ -17,7 +17,6 @@
         box-sizing: border-box;
       }
       body {
-        background-color: #344e41;
         font-family: Arial, Helvetica, sans-serif;
       }
 
@@ -31,7 +30,9 @@
       }
       .card {
         width: 600px;
-        background-color: white;
+        background-color: rgb(252, 252, 252);
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.378);
+
         min-height: 580px;
         padding-bottom: 26px;
         border-radius: 16px;
@@ -105,10 +106,9 @@
       .registerbtn:hover {
         color: #344e41;
       }
-      .message{
+      .message {
         margin-bottom: 10px;
         color: #ee9b00;
-
       }
     </style>
   </head>
@@ -170,11 +170,11 @@
       </div>
     </div>
     <script>
-      var messageDiv = document.getElementById('message')
-      function hideMessage(){
-        messageDiv.style.display = 'none'
+      var messageDiv = document.getElementById("message");
+      function hideMessage() {
+        messageDiv.style.display = "none";
       }
-      setTimeout(hideMessage, 3000)
+      setTimeout(hideMessage, 3000);
     </script>
   </body>
 </html>

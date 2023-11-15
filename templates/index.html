@@ -1,17 +1,19 @@
 {% extends 'base.html' %} {% load static %} {% block custom_style %}
 <style>
-  
   .image_container {
     display: grid;
     max-width: 1200px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-items: center;
     margin: 10px auto;
-    padding: 5px;
+    padding: 50px;
     gap: 10px;
     position: relative;
   }
+
   .card {
     width: 100%;
+
     transition: transform 0.3s;
     position: relative;
     color: white;
@@ -31,24 +33,24 @@
     height: 100%;
   }
   .card:hover {
-    transform: scale(1.1);
     cursor: pointer;
   }
 
   .addIcon {
     background-color: #e60124;
-    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+    /* box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555); */
     width: 38px;
     height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    position: fixed;
-    bottom: 20px;
-    right: 60px;
+    /* position: fixed;
+    bottom: 30%;
+    right: 60px; */
     cursor: pointer;
     transition: transform 0.3s;
+    z-index: 2;
   }
 
   .addIcon:hover {
@@ -57,25 +59,26 @@
 
   .bookmarkIcon {
     background-color: #e60124;
-    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+    /* box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555); */
     width: 38px;
     height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    position: fixed;
-    bottom: 20px;
-    right: 10px;
+    /* position: fixed;
+    bottom: 30%;
+    right: 10px; */
     cursor: pointer;
     transition: transform 0.3s;
+    z-index: 2;
   }
 
   .bookmarkIcon:hover {
     transform: scale(1.5);
   }
 
-  .bookmarkIcon2 {
+  .bookmarkIcon2_container {
     position: absolute;
     bottom: 5%;
     right: 10%;
@@ -177,66 +180,82 @@
     text-align: center;
     margin-top: 10px;
   }
-  .bookmarked{
+  .bookmarked {
     color: #ee9b00;
+  }
+  .footer {
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    bottom: 0;
+    padding: 10px;
+    width: 100%;
+  }
+  .icons-nav {
+    
+    display: flex;
+    justify-content: center;
+    gap: 15px;
   }
 </style>
 {% endblock %} {% block body %} {% include 'includes/navbar.html' %}
 
 <div class="image_container">
-  <div class="addIcon" onclick="addImage()">
-    <i class="fa-solid fa-plus" style="color: white"></i>
-  </div>
-  <a class="bookmarkIcon" href="{% url 'bookmarkpage' %}">
-    <i class="fa-regular fa-bookmark" style="color: white"></i>
-  </a>
   {% for post in posts %}
   <div class="card">
     <img src="{{post.image.url}}" alt="" />
     <div class="likeIcon">
       <i class="fa-regular fa-heart" style="color: white"></i>
     </div>
-    <div class="bookmarkIcon2" data-post-id="{{post.id}}">
-      <i class="fa-regular fa-bookmark" style="color: white"></i>
-      <p style="margin-left: 10px;">{{post.saved_by.count}}</p>
+    <div class="bookmarkIcon2_container" data-post-id="{{post.id}}">
+      <i class="fa-regular fa-bookmark bookmarkIcon2" style="color: white"></i>
+      <p style="margin-left: 10px">{{post.saved_by.count}}</p>
     </div>
   </div>
   {% endfor %}
+</div>
+<div class="footer">
+  <div class="icons-nav">
+    <div class="addIcon" onclick="addImage()">
+      <i class="fa-solid fa-plus" style="color: white"></i>
+    </div>
+    <a class="bookmarkIcon" href="{% url 'bookmarkpage' %}">
+      <i class="fa-regular fa-bookmark" style="color: white"></i>
+    </a>
+  </div>
+</div>
+<div id="addImageModal" class="addmodal">
+  <div class="addmodal-content">
+    <span class="close">&times;</span>
+    <!-- Add your modal content here -->
+    <p>Add Post</p>
+    <div class="uploadInputBox">
+      <form method="POST" id="postForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input
+          type="file"
+          id="imageInput"
+          accept="image/*"
+          name="image"
+          class="form-control"
+        />
+        <input
+          type="text"
+          id=""
+          placeholder="caption"
+          name="caption"
+          class="form-control"
+        />
+        <input
+          type="text"
+          id=""
+          placeholder="tags"
+          name="tags"
+          class="form-control"
+        />
+        <button type="submit" class="uploadbtn">Upload</button>
 
-  <div id="addImageModal" class="addmodal">
-    <div class="addmodal-content">
-      <span class="close">&times;</span>
-      <!-- Add your modal content here -->
-      <p>Add Post</p>
-      <div class="uploadInputBox">
-        <form method="POST" id="postForm" enctype="multipart/form-data">
-          {% csrf_token %}
-          <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-            name="image"
-            class="form-control"
-          />
-          <input
-            type="text"
-            id=""
-            placeholder="caption"
-            name="caption"
-            class="form-control"
-          />
-          <input
-            type="text"
-            id=""
-            placeholder="tags"
-            name="tags"
-            class="form-control"
-          />
-          <button type="submit" class="uploadbtn">Upload</button>
-
-          <p class="message" id="message"></p>
-        </form>
-      </div>
+        <p class="message" id="message"></p>
+      </form>
     </div>
   </div>
 </div>
@@ -309,7 +328,10 @@
           "X-CSRFToken": csrfToken,
         },
         success: function (data) {
-          clickedElement.toggleClass('bookmarked', data.message.includes('removed'));
+          clickedElement.toggleClass(
+            "bookmarked",
+            data.message.includes("removed")
+          );
           window.location.reload();
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -318,10 +340,9 @@
       });
     });
 
-    
-
-
-    
+    $(".likeIcon").click(function () {
+      console.log("liked");
+    });
   });
 </script>
 
