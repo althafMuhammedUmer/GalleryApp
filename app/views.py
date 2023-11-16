@@ -50,34 +50,32 @@ def create_post(request):
 
 @login_required(login_url='user_login')
 def bookmark_post(request, post_id):
-    try:
-        post = get_object_or_404(Post, id=post_id)
-        user = request.user
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+    existing_bookmark = Bookmark.objects.filter(user=request.user, post=post).first()
 
-        existing_bookmark = Bookmark.objects.filter(user=request.user, post=post).first()
-
-        if not existing_bookmark:
-            bookmark = Bookmark.objects.create(
+    if user in post.saved_by.all():
+        post.saved_by.remove(user)
+        existing_bookmark.delete()
+        is_saved = False
+    
+    else:
+        bookmark = Bookmark.objects.create(
                 user=request.user,
                 post=post
             )
-            bookmark.save()
+        bookmark.save()
+        post.saved_by.add(user)
+        is_saved = True
+    
+    saveby_count = post.saved_by.count()
+    print(saveby_count)
 
-            post.saved_by.add(user)
-
-            return JsonResponse({'message' : 'Post saved successfully.'})
-        
-        else:
-            existing_bookmark.delete()
-            post.saved_by.remove(user)
-            return JsonResponse({'message': 'Bookmark removed successfully.'})
-        
-    except Exception as e:
-        return JsonResponse({'error': f'Error bookmarking post: {str(e)}'}, status=500)
+    return JsonResponse({'is_saved': is_saved, "saveby_count": saveby_count})
     
 
 def toggle_like(request, post_id):
-    post = get_object_or_404(Post, pk=id)
+    post = get_object_or_404(Post, pk=post_id)
     user = request.user
 
     if user in post.liked_by.all():

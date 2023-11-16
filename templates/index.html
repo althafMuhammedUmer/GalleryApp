@@ -90,7 +90,8 @@
     align-items: center;
   }
   .bookmarkIcon2:hover {
-    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+    transition: transform 0.3s;
+    transform: scale(1.5);
   }
 
   .likeIcon {
@@ -104,8 +105,9 @@
     justify-content: center;
     align-items: center;
   }
-  .likeIcon:hover {
-    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555);
+  .heart:hover {
+    transition: transform 0.3s;
+    transform: scale(1.5);
   }
 
   /* Modal Styles */
@@ -191,10 +193,12 @@
     width: 100%;
   }
   .icons-nav {
-    
     display: flex;
     justify-content: center;
     gap: 15px;
+  }
+  .liked {
+    color: red;
   }
 </style>
 {% endblock %} {% block body %} {% include 'includes/navbar.html' %}
@@ -203,11 +207,16 @@
   {% for post in posts %}
   <div class="card">
     <img src="{{post.image.url}}" alt="" />
-    <div class="likeIcon">
-      <i class="fa-regular fa-heart" style="color: white"></i>
+    <div class="likeIcon" data-post-id="{{post.id}}">
+      <i
+        class="fa-regular fa-heart heart {% if request.user in post.liked_by.all %}liked{% endif %}"
+      ></i>
+      <p style="margin-left: 10px">{{post.liked_by.count}}</p>
     </div>
     <div class="bookmarkIcon2_container" data-post-id="{{post.id}}">
-      <i class="fa-regular fa-bookmark bookmarkIcon2" style="color: white"></i>
+      <i
+        class="fa-regular fa-bookmark bookmarkIcon2 {% if request.user in post.saved_by.all %}liked{% endif %}"
+      ></i>
       <p style="margin-left: 10px">{{post.saved_by.count}}</p>
     </div>
   </div>
@@ -316,9 +325,10 @@
 
     var bookmarkButton = $("#bookmarkButton");
 
-    $(".bookmarkIcon2").click(function () {
+    $(".bookmarkIcon2_container").click(function () {
       console.log("clicked");
       const postId = $(this).data("post-id");
+      console.log(postId);
       const clickedElement = $(this);
 
       $.ajax({
@@ -327,21 +337,53 @@
         headers: {
           "X-CSRFToken": csrfToken,
         },
-        success: function (data) {
-          clickedElement.toggleClass(
-            "bookmarked",
-            data.message.includes("removed")
+        success: function (response) {
+          console.log("response");
+          console.log(response.saveby_count);
+          $(`.bookmarkIcon2_container[data-post-id=${postId}] p`).text(
+            response.saveby_count
           );
-          window.location.reload();
+          if (response.is_saved) {
+            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
+              "color",
+              "red"
+            );
+          } else {
+            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
+              "color",
+              "white"
+            );
+          }
         },
-        error: function (xhr, textStatus, errorThrown) {
-          console.error(xhr.responseJSON);
+        error: function (error) {
+          console.error(error);
         },
       });
     });
 
     $(".likeIcon").click(function () {
       console.log("liked");
+      const postId = $(this).data("post-id");
+      console.log(postId);
+
+      $.ajax({
+        url: `/toggle-like/${postId}/`,
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        success: function (response) {
+          $(`.likeIcon[data-post-id=${postId}] p`).text(response.likes_count);
+          if (response.is_liked) {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "red");
+          } else {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "white");
+          }
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
     });
   });
 </script>
