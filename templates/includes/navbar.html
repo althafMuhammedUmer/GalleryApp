@@ -1,6 +1,5 @@
 {% load static %} {% block custom_style %}
 <style>
-
   .search_bar {
     flex-grow: 1;
     margin: auto;
@@ -12,13 +11,12 @@
     width: 100%;
     border: none;
     background-color: #feededbd;
-    
+
     outline: none;
   }
 
   .search_bar:focus-within {
     border: 2px solid #e60124;
-
   }
   .go-btn {
     border: none;
@@ -34,7 +32,7 @@
   <div class="nav">
     <a class="logo" href="/">picPlus+</a>
     <div class="search_bar">
-      <form method="GET" action="">
+      <form method="GET" action="{% url 'search_posts' %}">
         <div class="flex">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,3 +87,8 @@
   <div class="dropdown-item"><p>Settings</p></div>
   <a href="{% url 'user_logout' %}" class="dropdown-item"><p>Logout</p></a>
 </div>
+{% block custom_scripts %}
+<script>
+  
+</script>
+{% endblock %}

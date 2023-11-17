@@ -13,12 +13,31 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+@login_required(login_url='user_login')
 def bookmarkpage(request):
     mybookmarks = Bookmark.objects.filter(user=request.user)
     context = {
         "mybookmarks": mybookmarks
     }
     return render(request, 'bookmark.html', context)
+
+
+def search_posts(request):
+    query = request.GET.get('q')
+
+    if query:
+        posts_by_caption = Post.objects.filter(caption__icontains=query)
+        posts_by_tags = Post.objects.filter(tags__name__icontains=query)
+
+        posts = (posts_by_caption | posts_by_tags).distinct() # distinct is used to remove duplicates
+    
+    else:
+        posts = Post.objects.all()
+
+    return render(request, 'index.html', {"posts": posts, "query": query })
+
+
+
 
 @login_required(login_url='user_login')
 def create_post(request):

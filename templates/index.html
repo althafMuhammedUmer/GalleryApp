@@ -200,11 +200,15 @@
   .liked {
     color: red;
   }
+  .result-text {
+    top: 40%;
+    position: absolute;
+  }
 </style>
 {% endblock %} {% block body %} {% include 'includes/navbar.html' %}
 
 <div class="image_container">
-  {% for post in posts %}
+  {% if posts %} {% for post in posts %}
   <div class="card">
     <img src="{{post.image.url}}" alt="" />
     <div class="likeIcon" data-post-id="{{post.id}}">
@@ -220,7 +224,9 @@
       <p style="margin-left: 10px">{{post.saved_by.count}}</p>
     </div>
   </div>
-  {% endfor %}
+  {% endfor %} {% else %}
+  <p class="result-text">No search results found for "{{ query }}"</p>
+  {% endif %}
 </div>
 <div class="footer">
   <div class="icons-nav">
