@@ -84,11 +84,18 @@
       <i class="fa-solid fa-check"></i>
     </div>
   </div>
-  <div class="dropdown-item"><p>Settings</p></div>
+  <a href="/profile" class="dropdown-item"><p>profile</p></a>
   <a href="{% url 'user_logout' %}" class="dropdown-item"><p>Logout</p></a>
 </div>
 {% block custom_scripts %}
 <script>
-  
+  function openDropDown() {
+    var modal = document.getElementById("dropDownModal");
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      modal.style.display = "block";
+    }
+  }
 </script>
 {% endblock %}

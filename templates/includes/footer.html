@@ -1,53 +1,33 @@
-{% extends 'base.html' %} {% load static %} {% block custom_style %}
+{% block custom_style %}
 <style>
-  .image_container {
-    display: grid;
-    max-width: 1200px;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    justify-items: center;
-    margin: 10px auto;
-    padding: 50px;
-    gap: 10px;
-    position: relative;
-  }
-
-  .card {
+  .footer {
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    bottom: 0;
+    padding: 10px;
     width: 100%;
-
-    transition: transform 0.3s;
-    position: relative;
-    color: white;
   }
-
-  .card:nth-child(odd) {
-    grid-row-end: span var(--card_small);
+  .icons-nav {
+    display: flex;
+    justify-content: end;
+    gap: 15px;
   }
-  .card:nth-child(even) {
-    grid-row-end: span var(--card_medium);
+  @media screen and (max-width: 480px) {
+    .icons-nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
   }
-
-  .card img {
-    border-radius: var(--card_border_radius);
-    object-fit: cover;
-    max-width: 100%;
-    height: 100%;
-  }
-  .card:hover {
-    cursor: pointer;
-  }
-
   .addIcon {
     background-color: #e60124;
-    /* box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555); */
     width: 38px;
     height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    /* position: fixed;
-    bottom: 30%;
-    right: 60px; */
+
     cursor: pointer;
     transition: transform 0.3s;
     z-index: 2;
@@ -66,9 +46,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    /* position: fixed;
-    bottom: 30%;
-    right: 10px; */
+
     cursor: pointer;
     transition: transform 0.3s;
     z-index: 2;
@@ -123,6 +101,7 @@
   .addmodal-content {
     background-color: #fefefe;
     padding: 20px;
+
     border-radius: 10px;
     max-width: 400px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.54);
@@ -184,57 +163,9 @@
   .bookmarked {
     color: #ee9b00;
   }
-  .footer {
-    background-color: rgb(255, 255, 255);
-    position: fixed;
-    bottom: 0;
-    padding: 10px;
-    width: 100%;
-  }
-  .icons-nav {
-    display: flex;
-    justify-content: end;
-    gap: 15px;
-  }
-  @media screen and (max-width: 480px) {
-    .icons-nav {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-  }
-  .liked {
-    color: red;
-  }
-  .result-text {
-    top: 40%;
-    position: absolute;
-    color: rgb(50, 50, 50);
-  }
 </style>
-{% endblock %} {% block body %} {% include 'includes/navbar.html' %}
+{% endblock %}
 
-<div class="image_container">
-  {% if posts %} {% for post in posts %}
-  <div class="card">
-    <img src="{{post.image.url}}" alt="" />
-    <div class="likeIcon" data-post-id="{{post.id}}">
-      <i
-        class="fa-regular fa-heart heart {% if request.user in post.liked_by.all %}liked{% endif %}"
-      ></i>
-      <p style="margin-left: 10px">{{post.liked_by.count}}</p>
-    </div>
-    <div class="bookmarkIcon2_container" data-post-id="{{post.id}}">
-      <i
-        class="fa-regular fa-bookmark bookmarkIcon2 {% if request.user in post.saved_by.all %}liked{% endif %}"
-      ></i>
-      <p style="margin-left: 10px">{{post.saved_by.count}}</p>
-    </div>
-  </div>
-  {% endfor %} {% else %}
-  <p class="result-text">No search results found for "{{ query }}"</p>
-  {% endif %}
-</div>
 <div class="footer">
   <div class="icons-nav">
     <div class="addIcon" onclick="addImage()">
@@ -245,10 +176,11 @@
     </a>
   </div>
 </div>
+
 <div id="addImageModal" class="addmodal">
   <div class="addmodal-content">
     <span class="close">&times;</span>
-
+    <!-- Add your modal content here -->
     <p>Add Post</p>
     <div class="uploadInputBox">
       <form method="POST" id="postForm" enctype="multipart/form-data">
@@ -282,7 +214,8 @@
   </div>
 </div>
 
-{% endblock %} {% block custom_scripts %}
+{% block custom_scripts %}
+
 <script>
   function addImage() {
     console.log("adding image..");
@@ -303,7 +236,6 @@
 
   $(document).ready(function () {
     const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-
     $("#postForm").submit(function (e) {
       e.preventDefault();
 
@@ -328,70 +260,6 @@
         },
       });
     });
-
-    var bookmarkButton = $("#bookmarkButton");
-
-    $(".bookmarkIcon2_container").click(function () {
-      console.log("clicked");
-      const postId = $(this).data("post-id");
-      console.log(postId);
-      const clickedElement = $(this);
-
-      $.ajax({
-        url: `/bookmark_post/${postId}/`,
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
-        success: function (response) {
-          console.log("response");
-          console.log(response.saveby_count);
-          $(`.bookmarkIcon2_container[data-post-id=${postId}] p`).text(
-            response.saveby_count
-          );
-          if (response.is_saved) {
-            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
-              "color",
-              "red"
-            );
-          } else {
-            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
-              "color",
-              "white"
-            );
-          }
-        },
-        error: function (error) {
-          console.error(error);
-        },
-      });
-    });
-
-    $(".likeIcon").click(function () {
-      console.log("liked");
-      const postId = $(this).data("post-id");
-      console.log(postId);
-
-      $.ajax({
-        url: `/toggle-like/${postId}/`,
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
-        success: function (response) {
-          $(`.likeIcon[data-post-id=${postId}] p`).text(response.likes_count);
-          if (response.is_liked) {
-            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "red");
-          } else {
-            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "white");
-          }
-        },
-        error: function (error) {
-          console.error("Error:", error);
-        },
-      });
-    });
   });
 </script>
-
 {% endblock %}

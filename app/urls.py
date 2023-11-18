@@ -6,6 +6,7 @@ urlpatterns = [
     path('bookmark_post/<int:post_id>/', views.bookmark_post, name='bookmark_post'),
     path('toggle-like/<int:post_id>/', views.toggle_like, name='toggle-like'),
     path('bookmark_page/', views.bookmarkpage, name="bookmarkpage"),
+    path('profile/', views.profile, name='profile'),
 
     path('search/', views.search_posts, name='search_posts'),
 

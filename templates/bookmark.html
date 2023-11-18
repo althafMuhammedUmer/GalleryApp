@@ -11,23 +11,31 @@
   }
   .card_container {
     display: grid;
-    width: 1200px;
+    max-width: 1200px;
     min-height: 100vh;
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
   }
-  .card-heading {
+
+  .saved-heading {
     text-align: center;
-    grid-column: 1 / span 5;
-    align-self: center;
+    
+    align-self: flex-start;
     
     padding: 10px;
     font-size: 28px;
   }
+
+  .saved-heading a {
+    text-decoration: none;
+    color: black;
+    font-size: 22px;
+  }
+
   .card {
     width: 100%;
     transition: transform 0.3s;
@@ -40,12 +48,17 @@
     max-width: 100%;
     height: auto;
   }
+  .bookmarkIcon{
+    font-size: 24px;
+    margin-right: 5px;
+    color: #780000;
+  }
 </style>
 {% endblock %} {% block body %}
 <!-- nav -->
 {% include 'includes/navbar.html' %}
+<div class="saved-heading" ><i class="fa-solid fa-bookmark bookmarkIcon"></i><a href="/bookmark_page">Saved</a></div>
 <div class="card_container">
-  <div class="card-heading">Saved</div>
   {% for mybookmark in mybookmarks %}
   <div class="card">
     <img src="{{mybookmark.post.image.url}}" alt="" />

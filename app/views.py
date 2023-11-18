@@ -7,7 +7,7 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url='user_login')
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('created_at')
     context = {
         "posts": posts
     }
@@ -20,6 +20,16 @@ def bookmarkpage(request):
         "mybookmarks": mybookmarks
     }
     return render(request, 'bookmark.html', context)
+
+def profile(request):
+    user = request.user
+    posts = Post.objects.filter(user=user).order_by('created_at')
+
+    context = {
+        "posts": posts
+    }
+
+    return render(request, 'profile.html', context)
 
 
 def search_posts(request):

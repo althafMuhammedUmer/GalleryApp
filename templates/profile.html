@@ -1,0 +1,230 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Bookmark
+{%endblock %} {% block custom_style %}
+<style>
+  :root {
+    --card_width: 250px;
+    --card_border_radius: 16px;
+    --row_increment: 10px;
+    --card_small: 26;
+    --card_medium: 33;
+    --card_large: 45;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 10px auto;
+    justify-content: center;
+
+    align-items: center;
+    padding: 20px;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+  }
+
+  .image_container {
+    display: grid;
+    max-width: 1200px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-items: center;
+    margin: 10px auto;
+    padding: 50px;
+    gap: 10px;
+    position: relative;
+  }
+
+  .card {
+    width: 100%;
+
+    transition: transform 0.3s;
+    position: relative;
+    color: white;
+  }
+  .card:nth-child(odd) {
+    grid-row-end: span var(--card_small);
+  }
+  .card:nth-child(even) {
+    grid-row-end: span var(--card_medium);
+  }
+
+  .card img {
+    border-radius: var(--card_border_radius);
+    object-fit: cover;
+    max-width: 100%;
+    height: 100%;
+  }
+  .profile_pic {
+    width: 64px;
+    height: 64px;
+  }
+  .fa-circle-chevron-left {
+    font-size: 22px;
+    color: #e60124;
+    cursor: pointer;
+  }
+  .fa-gear {
+    font-size: 22px;
+    color: #e60124;
+  }
+  .likeIcon {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    width: 38px;
+    height: 38px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .liked {
+    color: red;
+  }
+
+  .addmodal {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 80px;
+    width: 350px;
+    min-height: 350px;
+  }
+
+  .addmodal-content {
+    background-color: #fefefe;
+    padding: 20px;
+
+    border-radius: 10px;
+    max-width: 400px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.54);
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .uploadbtn {
+    width: 100%;
+    background-color: #e60124;
+    border: none;
+    color: white;
+    margin-top: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .uploadbtn:hover {
+    background-color: #780000;
+  }
+
+  .uploadInputBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    align-self: flex-end;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+  }
+
+  .message {
+    margin-bottom: 10px;
+    color: #ee9b00;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .bookmarked {
+    color: #ee9b00;
+  }
+  .footer {
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    bottom: 0;
+    padding: 10px;
+    width: 100%;
+  }
+</style>
+{% endblock %} {% block body %}
+
+<div class="container">
+  <div class="head">
+    <a href="/"><i class="fa-solid fa-circle-chevron-left"></i></a>
+
+    <div class="profile_container">
+      <img
+        class="profile_pic"
+        src="{% static 'assets/profilepic/p9.jpeg' %}"
+        alt=""
+      />
+      <p style="text-align: center;">{{user.username}}</p>
+    </div>
+    <i class="fa-solid fa-gear"></i>
+  </div>
+  <div class="image_container">
+    {% for post in posts %}
+    <div class="card">
+      <img src="{{post.image.url}}" alt="" />
+      <div class="likeIcon" data-post-id="{{post.id}}">
+        <i
+          class="fa-regular fa-heart heart {% if request.user in post.liked_by.all %}liked{% endif %}"
+        ></i>
+        <p style="margin-left: 10px">{{post.liked_by.count}}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include 'includes/footer.html' %} {% block custom_scripts %}
+<script>
+  $(document).ready(function () {
+    const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+    $(".likeIcon").click(function () {
+      console.log("liked");
+      const postId = $(this).data("post-id");
+      console.log(postId);
+
+      $.ajax({
+        url: `/toggle-like/${postId}/`,
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        success: function (response) {
+          $(`.likeIcon[data-post-id=${postId}] p`).text(response.likes_count);
+          if (response.is_liked) {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "red");
+          } else {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "white");
+          }
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
+    });
+  });
+</script>
+{% endblock %} {% endblock %}

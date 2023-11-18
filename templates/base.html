@@ -121,15 +121,44 @@
         flex-direction: column;
         gap: 5px;
       }
-      a{
+      a {
         text-decoration: none;
       }
 
-      .flex{
+      .flex {
         display: flex;
         align-items: center;
         justify-content: center;
       }
+
+      .card_container {
+        display: grid;
+        max-width: 1200px;
+        min-height: 100vh;
+        margin: 10px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        width: 100%;
+        transition: transform 0.3s;
+        position: relative;
+      }
+
+      .card img {
+        border-radius: var(--card_border_radius);
+        object-fit: cover;
+        max-width: 100%;
+        height: auto;
+      }
+
+      
+
+      
     </style>
 
     {% block custom_style %} {% endblock %}
