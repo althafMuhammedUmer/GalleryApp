@@ -48,7 +48,7 @@
     max-width: 100%;
     height: auto;
   }
-  .bookmarkIcon{
+  .mybookmarkIcon{
     font-size: 24px;
     margin-right: 5px;
     color: #780000;
@@ -57,7 +57,7 @@
 {% endblock %} {% block body %}
 <!-- nav -->
 {% include 'includes/navbar.html' %}
-<div class="saved-heading" ><i class="fa-solid fa-bookmark bookmarkIcon"></i><a href="/bookmark_page">Saved</a></div>
+<div class="saved-heading" ><i class="fa-solid fa-bookmark mybookmarkIcon"></i><a href="/bookmark_page">Saved</a></div>
 <div class="card_container">
   {% for mybookmark in mybookmarks %}
   <div class="card">
