@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from app.views import index
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser
+from .models import CustomUser, UserProfile
+
 from django.db import IntegrityError
 
 # Create your views here.

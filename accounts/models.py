@@ -68,6 +68,13 @@ class CustomUser(AbstractBaseUser):
         return True
     
 
-
+class UserProfile(models.Model):
+    def profile_pic_upload_path(instance, filename):
+        return f"profilePic/{instance.user.username}/{filename}"
+    
+    user = models.OneToOneField(CustomUser, related_name='userprofile', on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to=profile_pic_upload_path, blank=True, null=True)
+    bio = models.TextField(null=True)
+    followers = models.ManyToManyField(CustomUser, related_name='following', blank=True)
 
 
