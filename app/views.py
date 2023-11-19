@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .models import Post, Tag, Bookmark
+from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -24,9 +25,11 @@ def bookmarkpage(request):
 def profile(request):
     user = request.user
     posts = Post.objects.filter(user=user).order_by('created_at')
+    userprofile = get_object_or_404(UserProfile, user=user)
 
     context = {
-        "posts": posts
+        "posts": posts,
+        "userprofile": userprofile,
     }
 
     return render(request, 'profile.html', context)

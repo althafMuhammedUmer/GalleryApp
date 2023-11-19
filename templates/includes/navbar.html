@@ -58,7 +58,7 @@
     <div class="username_nd_icon" onclick="openDropDown()">
       <img
         class="profile_pic"
-        src="{% static 'assets/profilepic/p9.jpeg' %}"
+        src="{{user.userprofile.profile_picture.url}}"
         alt=""
       />
 
@@ -72,7 +72,7 @@
   <div class="user-details-container">
     <img
       class="profile_pic"
-      src="{% static 'assets/profilepic/p9.jpeg' %}"
+      src="{{user.userprofile.profile_picture.url}}"
       alt=""
     />
 
