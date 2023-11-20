@@ -26,6 +26,13 @@
   .flex {
     gap: 5px;
   }
+
+  @media screen and (max-width: 480px) {
+    .username-in-nav {
+      display: none;
+      
+    }
+  }
 </style>
 {% endblock %}
 <nav>
@@ -62,7 +69,7 @@
         alt=""
       />
 
-      <p>{{user.username}}</p>
+      <p class="username-in-nav">{{user.username}}</p>
 
       <i class="fa-solid fa-caret-down"></i>
     </div>

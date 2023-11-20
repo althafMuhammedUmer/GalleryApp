@@ -30,12 +30,13 @@
 
       :root {
         --card_width: 250px;
-        --card_border_radius: 16px;
+        --card_border_radius: 4px;
         --row_increment: 10px;
         --card_small: 26;
         --card_medium: 33;
         --card_large: 45;
       }
+      
       * {
         margin: 0;
         padding: 0;
@@ -57,7 +58,7 @@
         align-items: center;
         justify-content: space-between;
         max-width: 1200px;
-        gap: 30px;
+        gap: 25px;
         margin: 0 auto;
         padding: 15px;
       }
@@ -164,6 +165,7 @@
 
     <!-- scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.min.js"></script>
     {% block custom_scripts %}
     <script>
       function addImage() {
@@ -189,27 +191,71 @@
         $("#postForm").submit(function (e) {
           e.preventDefault();
 
-          var formData = new FormData(this);
+          var fileInput = document.getElementById("imageInput");
 
-          $.ajax({
-            type: "POST",
-            url: "/create_post/",
-            data: formData,
-            headers: {
-              "X-CSRFToken": csrfToken,
-            },
-            processData: false,
-            contentType: false,
-            success: function (data) {
-              window.location.reload();
-            },
+          if (fileInput.files.length > 0) {
+            
+            new Compressor(fileInput.files[0], {
+              quality: 0.3, 
+              success(result) {               
+                var formData = new FormData();
+                formData.append("image", result, result.name);
+      
+                formData.append("caption", $("#captionInput").val());
+                formData.append("tags", $("#tagsInput").val());
 
-            error: function (xhr, textStatus, errorThrown) {
-              console.error(xhr.responseJSON);
-              $("#message").text("Error: " + xhr.responseJSON.error);
-            },
-          });
+                $.ajax({
+                  type: "POST",
+                  url: "/create_post/",
+                  data: formData,
+                  headers: {
+                    "X-CSRFToken": csrfToken,
+                  },
+                  processData: false,
+                  contentType: false,
+                  success: function (data) {
+                    window.location.reload();
+                  },
+                  error: function (xhr, textStatus, errorThrown) {
+                    console.error(xhr.responseJSON);
+                    $("#message").text("Error: " + xhr.responseJSON.error);
+                  },
+                });
+              },
+              error(error) {
+                console.log(error.message);
+              },
+            });
+          } else {
+            
+            $("#message").text("Please select an image.");
+          }
         });
+
+        // $("#postForm").submit(function (e) {
+        //   e.preventDefault();
+
+        //   var formData = new FormData(this);
+
+        //   $.ajax({
+        //     type: "POST",
+        //     url: "/create_post/",
+        //     data: formData,
+        //     headers: {
+        //       "X-CSRFToken": csrfToken,
+        //     },
+        //     processData: false,
+        //     contentType: false,
+        //     success: function (data) {
+        //       window.location.reload();
+        //     },
+
+        //     error: function (xhr, textStatus, errorThrown) {
+        //       console.error(xhr.responseJSON);
+        //       $("#message").text("Error: " + xhr.responseJSON.error);
+        //     },
+        //   });
+        // });
 
         var bookmarkButton = $("#bookmarkButton");
 

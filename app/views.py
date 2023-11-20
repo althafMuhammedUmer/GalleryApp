@@ -8,7 +8,7 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url='user_login')
 def index(request):
-    posts = Post.objects.all().order_by('created_at')
+    posts = Post.objects.all().order_by('-created_at')
     context = {
         "posts": posts
     }
