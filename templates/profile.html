@@ -191,7 +191,8 @@
     right: 5px;
     font-size: 12px;
   }
-  .show{
+  
+  .show {
     display: block;
   }
   .edit-post-dropdown:hover {
@@ -227,8 +228,8 @@
           onclick="toggleDropdown(this)"
         ></i>
         <div class="edit-post-dropdown">
-          <div class="btn-delete">
-            <i class="fa-solid fa-trash"></i>
+          <div class="btn-delete" data-post-id="{{post.id}}">
+            <i class="fa-solid fa-trash btn-delete"></i>
           </div>
         </div>
       </div>
@@ -243,13 +244,20 @@
     {% endfor %}
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function toggleDropdown(icon) {
-    console.log("click")
     var dropdown = icon.nextElementSibling;
     console.log(dropdown);
     dropdown.classList.toggle("show");
   }
+
+  $(document).ready(function () {
+    $('.btn-delete').on('click', function(event) {
+      event.stopPropagation();
+      console.log("delete");
+    });
+  });
 </script>
 
 {% endblock %}
