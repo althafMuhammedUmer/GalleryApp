@@ -191,12 +191,18 @@
     right: 5px;
     font-size: 12px;
   }
-  
+
   .show {
     display: block;
   }
   .edit-post-dropdown:hover {
     background-color: #ccc;
+  }
+  a {
+    text-decoration: none;
+  }
+  .fa-trash{
+    color: black;
   }
 </style>
 {% endblock %} {% block body %}
@@ -228,9 +234,9 @@
           onclick="toggleDropdown(this)"
         ></i>
         <div class="edit-post-dropdown">
-          <div class="btn-delete" data-post-id="{{post.id}}">
+          <a class="btn-delete" href="{% url 'delete-post' post.id %}">
             <i class="fa-solid fa-trash btn-delete"></i>
-          </div>
+          </a>
         </div>
       </div>
       <img src="{{post.image.url}}" alt="" />
@@ -244,20 +250,13 @@
     {% endfor %}
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% block custom_scripts %}
 <script>
   function toggleDropdown(icon) {
     var dropdown = icon.nextElementSibling;
     console.log(dropdown);
     dropdown.classList.toggle("show");
   }
-
-  $(document).ready(function () {
-    $('.btn-delete').on('click', function(event) {
-      event.stopPropagation();
-      console.log("delete");
-    });
-  });
 </script>
-
-{% endblock %}
+{% endblock %} {% endblock %}

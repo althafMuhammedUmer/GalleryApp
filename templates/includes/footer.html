@@ -215,14 +215,14 @@
         />
         <input
           type="text"
-          id=""
+          id="captionInput"
           placeholder="caption"
           name="caption"
           class="form-control"
         />
         <input
           type="text"
-          id=""
+          id="tagsInput"
           placeholder="tags"
           name="tags"
           class="form-control"
@@ -234,3 +234,135 @@
     </div>
   </div>
 </div>
+{% block custom_scripts %}
+<script>
+  function addImage() {
+    console.log("adding image..");
+    var modal = document.getElementById("addImageModal");
+    modal.style.display = "flex";
+
+    var closeBtn = document.getElementsByClassName("close")[0];
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  }
+
+  $(document).ready(function () {
+    const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+    $("#postForm").submit(function (e) {
+      e.preventDefault();
+
+      var fileInput = document.getElementById("imageInput");
+
+      if (fileInput.files.length > 0) {
+        new Compressor(fileInput.files[0], {
+          quality: 0.3,
+          success(result) {
+            var formData = new FormData();
+            formData.append("image", result, result.name);
+
+            formData.append("caption", $("#captionInput").val());
+            formData.append("tags", $("#tagsInput").val());
+
+            $.ajax({
+              type: "POST",
+              url: "/create_post/",
+              data: formData,
+              headers: {
+                "X-CSRFToken": csrfToken,
+              },
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                window.location.reload();
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                console.error(xhr.responseJSON);
+                $("#message").text("Error: " + xhr.responseJSON.error);
+              },
+            });
+          },
+          error(error) {
+            console.log(error.message);
+          },
+        });
+      } else {
+        $("#message").text("Please select an image.");
+      }
+    });
+
+    
+
+    var bookmarkButton = $("#bookmarkButton");
+
+    $(".bookmarkIcon2_container").click(function () {
+      console.log("clicked");
+      const postId = $(this).data("post-id");
+      console.log(postId);
+      const clickedElement = $(this);
+
+      $.ajax({
+        url: `/bookmark_post/${postId}/`,
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        success: function (response) {
+          console.log("response");
+          console.log(response.saveby_count);
+          $(`.bookmarkIcon2_container[data-post-id=${postId}] p`).text(
+            response.saveby_count
+          );
+          if (response.is_saved) {
+            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
+              "color",
+              "red"
+            );
+          } else {
+            $(`.bookmarkIcon2_container[data-post-id=${postId}] i`).css(
+              "color",
+              "white"
+            );
+          }
+        },
+        error: function (error) {
+          console.error(error);
+        },
+      });
+    });
+
+    $(".likeIcon").click(function () {
+      console.log("liked");
+      const postId = $(this).data("post-id");
+      console.log(postId);
+
+      $.ajax({
+        url: `/toggle-like/${postId}/`,
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+        success: function (response) {
+          $(`.likeIcon[data-post-id=${postId}] p`).text(response.likes_count);
+          if (response.is_liked) {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "red");
+          } else {
+            $(`.likeIcon[data-post-id=${postId}] i`).css("color", "white");
+          }
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
+    });
+  });
+</script>
+
+{% endblock %}

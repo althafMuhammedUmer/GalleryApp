@@ -22,6 +22,7 @@ def bookmarkpage(request):
     }
     return render(request, 'bookmark.html', context)
 
+@login_required(login_url='user_login')
 def profile(request):
     user = request.user
     posts = Post.objects.filter(user=user).order_by('created_at')
@@ -34,7 +35,7 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
-
+@login_required(login_url='user_login')
 def search_posts(request):
     query = request.GET.get('q')
 
@@ -105,7 +106,7 @@ def bookmark_post(request, post_id):
 
     return JsonResponse({'is_saved': is_saved, "saveby_count": saveby_count})
     
-
+@login_required(login_url='user_login')
 def toggle_like(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     user = request.user
@@ -121,6 +122,14 @@ def toggle_like(request, post_id):
     likes_count = post.liked_by.count()
 
     return JsonResponse({'is_liked': is_liked, "likes_count": likes_count})
+
+
+@login_required(login_url='user_login')
+def deletePost(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    return redirect(profile)
+
     
 
 
