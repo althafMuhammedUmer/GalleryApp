@@ -40,16 +40,14 @@
     gap: 20px;
     align-items: center;
     padding: 8px;
-
   }
-  .user-info img{
-    
+  .user-info img {
     width: 28px;
     height: 28px;
     border-radius: 50%;
     object-fit: cover;
   }
-  .user-info-name{
+  .user-info-name {
     color: black;
     font-size: 14px;
   }
@@ -209,7 +207,7 @@
     padding: 10px;
     width: 100%;
   }
-  
+
   .liked {
     color: red;
   }
@@ -218,6 +216,29 @@
     position: absolute;
     color: rgb(50, 50, 50);
   }
+  .pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e60124;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+  .btn-numbers{
+    
+    padding: 10px;
+  }
+  .active {
+  background-color: #e60124; 
+  color: white; 
+  }
 </style>
 {% endblock %} {% block body %} {% include 'includes/navbar.html' %}
 
@@ -225,7 +246,11 @@
   {% if posts %} {% for post in posts %}
   <div class="card">
     <div class="user-info">
-      <img class="user-info-pic" src="{{post.user.userprofile.profile_picture.url}}" alt="">
+      <img
+        class="user-info-pic"
+        src="{{post.user.userprofile.profile_picture.url}}"
+        alt=""
+      />
       <p class="user-info-name">{{post.user.username}}</p>
     </div>
     <img src="{{post.image.url}}" alt="" />
@@ -245,7 +270,46 @@
   {% endfor %} {% else %}
   <p class="result-text">No search results found for "{{ query }}"</p>
   {% endif %}
+
+
+</div>
+<!-- <div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ posts.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Next</a>
+            <a href="?page={{ posts.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </span>
+</div> -->
+<div class="pagination">
+
+  {% if posts.has_previous %}
+   <a href="?page={{ page_obj.previous_page_number }}" class="btn"><i class="fa-solid fa-chevron-left"></i></a>
+  {% endif %}
+  
+  {% for i in posts.paginator.page_range %}
+    {% if page_obj.number == i %}
+      <a href="#" class="btn-numbers {% if page_obj.number == i %}active{% endif %}">{{ i }} </a>
+    {% else %}
+      <a href="?page={{ i }}" class="btn-numbers">{{ i }}</a>
+    {% endif %}
+  {% endfor %}
+  
+  {% if posts.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn"><i class="fa-solid fa-chevron-right"></i></a>
+ 
+  {% endif %}
 </div>
 
 
-{% endblock %} 
+
+{% endblock %}

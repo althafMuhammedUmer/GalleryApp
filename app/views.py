@@ -4,11 +4,23 @@ from .models import Post, Tag, Bookmark
 from accounts.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 @login_required(login_url='user_login')
 def index(request):
-    posts = Post.objects.all().order_by('-created_at')
+    post_list = Post.objects.all().order_by('-created_at')
+
+    paginator = Paginator(post_list, 5)  # Number of posts per page
+
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        return JsonResponse({'posts': None})
+
     context = {
         "posts": posts
     }
