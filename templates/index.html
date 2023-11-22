@@ -216,7 +216,7 @@
     position: absolute;
     color: rgb(50, 50, 50);
   }
-  .pagination{
+  .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -231,13 +231,19 @@
     height: 24px;
     border-radius: 50%;
   }
-  .btn-numbers{
-    
+  .btn-numbers {
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center
   }
   .active {
-  background-color: #e60124; 
-  color: white; 
+    background-color: #e60124;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: white;
+    ;
   }
 </style>
 {% endblock %} {% block body %} {% include 'includes/navbar.html' %}
@@ -270,8 +276,6 @@
   {% endfor %} {% else %}
   <p class="result-text">No search results found for "{{ query }}"</p>
   {% endif %}
-
-
 </div>
 <!-- <div class="pagination">
     <span class="step-links">
@@ -291,25 +295,24 @@
     </span>
 </div> -->
 <div class="pagination">
-
   {% if posts.has_previous %}
-   <a href="?page={{ page_obj.previous_page_number }}" class="btn"><i class="fa-solid fa-chevron-left"></i></a>
-  {% endif %}
-  
-  {% for i in posts.paginator.page_range %}
-    {% if page_obj.number == i %}
-      <a href="#" class="btn-numbers {% if page_obj.number == i %}active{% endif %}">{{ i }} </a>
-    {% else %}
-      <a href="?page={{ i }}" class="btn-numbers">{{ i }}</a>
-    {% endif %}
-  {% endfor %}
-  
-  {% if posts.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}" class="btn"><i class="fa-solid fa-chevron-right"></i></a>
- 
+  <a href="?page={{ page_obj.previous_page_number }}" class="btn"
+    ><i class="fa-solid fa-chevron-left"></i
+  ></a>
+  {% endif %} {% for i in posts.paginator.page_range %} {% if page_obj.number == i %}
+  <a href="#" class="btn-numbers">{{ i }}</a>
+  {% else %}
+  <a
+    href="?page={{ i }}"
+    class="btn-numbers {% if request.GET.page == i|stringformat:'s' %} active{% endif %}"
+    >{{ i }}</a
+  >
+  {% endif %} {% endfor %} {% if posts.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" class="btn"
+    ><i class="fa-solid fa-chevron-right"></i
+  ></a>
+
   {% endif %}
 </div>
-
-
 
 {% endblock %}
