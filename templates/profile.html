@@ -29,6 +29,7 @@
     display: grid;
     max-width: 1200px;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
     justify-items: center;
     margin: 10px auto;
     gap: 10px;
@@ -38,7 +39,12 @@
   @media screen and (max-width: 480px) {
     .image_container {
       display: grid;
+      max-width: 1200px;
       grid-template-columns: 1fr 1fr 1fr;
+      justify-items: center;
+      margin: 10px auto;
+      gap: 10px;
+      position: relative;
     }
     .likeIcon {
       font-size: 12px;
@@ -47,7 +53,7 @@
 
   .card {
     width: 100%;
-
+    
     transition: transform 0.3s;
     position: relative;
     color: white;
@@ -58,6 +64,7 @@
     object-fit: cover;
     max-width: 100%;
     height: 90%;
+    
   }
   .profile_container {
     display: flex;
@@ -201,7 +208,7 @@
   a {
     text-decoration: none;
   }
-  .fa-trash{
+  .fa-trash {
     color: black;
   }
 </style>
@@ -250,8 +257,7 @@
     {% endfor %}
   </div>
 </div>
-
-{% block custom_scripts %}
+{% include 'includes/footer.html' %} {% endblock %} {% block custom_scripts %}
 <script>
   function toggleDropdown(icon) {
     var dropdown = icon.nextElementSibling;
@@ -259,4 +265,4 @@
     dropdown.classList.toggle("show");
   }
 </script>
-{% endblock %} {% endblock %}
+{% endblock %}

@@ -1,6 +1,7 @@
 {% block custom_style %}
 <style>
   .footer {
+
     background-color: rgb(255, 255, 255);
     position: fixed;
     bottom: 0;
@@ -9,20 +10,23 @@
   }
   .icons-nav {
     display: flex;
+    align-items: center;
     justify-content: end;
     gap: 15px;
   }
   @media screen and (max-width: 480px) {
     .icons-nav {
       display: flex;
+      align-items: center;
       justify-content: space-around;
       gap: 15px;
     }
     .home {
       background-color: #e60124;
       color: white;
-      width: 38px;
-      height: 38px;
+      font-size: 12px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,21 +41,28 @@
     .home i {
       display: none;
     }
+    
+  }
+  @media screen and (max-width: 480px) {
+    .addIcon i {
+      font-size: 12px;
+    }
+    
   }
 
   .addIcon {
-    background-color: #e60124;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-
-    cursor: pointer;
-    transition: transform 0.3s;
-    z-index: 2;
-  }
+      background-color: #e60124;
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 2;
+    }
 
   .addIcon:hover {
     transform: scale(1.5);
@@ -59,9 +70,9 @@
 
   .bookmarkIcon {
     background-color: #e60124;
-    /* box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.555); */
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,7 +204,7 @@
       <i class="fa-solid fa-plus" style="color: white"></i>
     </div>
     <a class="bookmarkIcon" href="{% url 'bookmarkpage' %}">
-      <i class="fa-regular fa-bookmark" style="color: white"></i>
+      <i class="fa-solid fa-bookmark" style="color: white;"></i>
     </a>
   </div>
 </div>
@@ -297,8 +308,6 @@
         $("#message").text("Please select an image.");
       }
     });
-
-    
 
     var bookmarkButton = $("#bookmarkButton");
 
