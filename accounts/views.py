@@ -108,3 +108,13 @@ def update_user_profile(request, user_id):
 def forgot_password(request):
     return render(request, 'forgotpassword.html')
 
+
+def check_email_isExist(request, email_id):
+    if request.method == "GET":
+        
+        email_exist = CustomUser.objects.filter(email=email_id).exists()
+
+        return JsonResponse({"exists": email_exist})
+    
+    return JsonResponse({"exists": False})
+
