@@ -49,11 +49,20 @@
     .likeIcon {
       font-size: 12px;
     }
+    .edit-profile-form-section {
+      width: 80%;
+    }
+  }
+
+  @media screen and (min-width: 480px) {
+    .edit-profile-form-section {
+      width: 40%;
+    }
   }
 
   .card {
     width: 100%;
-    
+
     transition: transform 0.3s;
     position: relative;
     color: white;
@@ -64,7 +73,6 @@
     object-fit: cover;
     max-width: 100%;
     height: 90%;
-    
   }
   .profile_container {
     display: flex;
@@ -211,6 +219,62 @@
   .fa-trash {
     color: black;
   }
+
+  .edit-profile-btn-section {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .edit-profile-btn {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 4px;
+    background-color: #e60124;
+    color: white;
+    padding: 6px 18px;
+    cursor: pointer;
+  }
+
+  .edit-profile-btn:hover {
+    background-color: #780000;
+  }
+  .edit-profile-form-section {
+    border-radius: 4px;
+    display: none;
+
+    margin: 10px auto;
+
+    min-height: 250px;
+  }
+  .form-container {
+    padding: 20px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .username-field {
+    grid-column: 1/ -1;
+  }
+  .edit-profile-pic {
+    justify-self: center;
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 50%;
+    
+  }
+  .btn-submit {
+    border-radius: 4px;
+    grid-column: 1/ -1;
+    padding: 8px 14px;
+    background-color: #ee9b00;
+    color: white;
+    border: none;
+  }
 </style>
 {% endblock %} {% block body %}
 
@@ -232,6 +296,73 @@
     </div>
     <i class="fa-solid fa-gear"></i>
   </div>
+  <div class="edit-profile-btn-section">
+    <div class="edit-profile-btn" onclick="toggleEditProfileForm()">
+      <p>Edit profile</p>
+      <i class="fa-regular fa-pen-to-square"></i>
+    </div>
+  </div>
+  <div class="edit-profile-form-section">
+    <form action="">
+      <div class="form-container">
+        <img
+          class="edit-profile-pic"
+          src="{{userprofile.profile_picture.url}}"
+          alt=""
+        />
+        <input
+          type="file"
+          id="imageInput"
+          accept="image/*"
+          name="image"
+          class="form-control"
+        />
+
+        <div class="form-item2">
+          <input
+            type="text"
+            class="form-control"
+            name="first_name"
+            placeholder="First Name"
+          />
+        </div>
+        <div class="form-item2">
+          <input
+            type="text"
+            class="form-control"
+            name="last_name"
+            placeholder="Last Name"
+          />
+        </div>
+        <div class="form-item2 username-field">
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            placeholder="User Name"
+          />
+        </div>
+        <div class="form-item2">
+          <input
+            type="text"
+            class="form-control"
+            name="email"
+            placeholder="Email"
+          />
+        </div>
+        <div class="form-item2">
+          <input
+            type="text"
+            class="form-control"
+            name="bio"
+            placeholder="bio"
+          />
+        </div>
+        <button class="btn-submit btn">Save</button>
+      </div>
+    </form>
+  </div>
+
   <div class="image_container">
     {% for post in posts %}
     <div class="card">
@@ -263,6 +394,15 @@
     var dropdown = icon.nextElementSibling;
     console.log(dropdown);
     dropdown.classList.toggle("show");
+  }
+  function toggleEditProfileForm() {
+    var formSection = document.querySelector(".edit-profile-form-section");
+    var profile_pic_section = document.querySelector(".profile_container");
+    formSection.style.display =
+      formSection.style.display === "none" ? "block" : "none";
+
+    profile_pic_section.style.display =
+      profile_pic_section.style.display === "flex" ? "none" : "flex";
   }
 </script>
 {% endblock %}
