@@ -80,7 +80,7 @@
       .form-control:focus {
         border: 2px solid #d90429;
       }
-      .forgot-password-text {
+      .forgot-password-text a {
         display: flex;
         justify-content: end;
         font-size: 14px;
@@ -112,16 +112,20 @@
         text-decoration: none;
         cursor: pointer;
       }
-      .forgot-password-text:hover {
-        color: #344e41;
+      .forgot-password-text a:hover {
+        color: #000000;
       }
       .registerbtn:hover {
-        color: #344e41;
+        color: #000000;
       }
       .message {
         margin-bottom: 10px;
         
         color: #ee9b00;
+      }
+      a{
+        text-decoration: none;
+        
       }
     </style>
   </head>
@@ -146,6 +150,7 @@
                   placeholder="Email"
                   class="form-control"
                   name="email"
+                  required
                 />
               </div>
               <div class="form-item">
@@ -154,10 +159,11 @@
                   placeholder="Password"
                   class="form-control"
                   name="password"
+                  required
                 />
               </div>
               <div class="forgot-password-text">
-                <p>Forgot Password</p>
+                <a href="/forgot_password">Forgot Password</a>
               </div>
               <button class="btn" type="submit">Login</button>
               <div class="footer-text">

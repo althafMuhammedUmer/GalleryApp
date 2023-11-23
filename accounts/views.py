@@ -65,7 +65,7 @@ def user_logout(request):
     logout(request)
     return redirect(user_login)
 
-
+@login_required(login_url='user_login')
 def get_user_details(request, user_id):
     user = get_object_or_404(CustomUser, pk=user_id)
     data = {
@@ -78,7 +78,7 @@ def get_user_details(request, user_id):
 
     return JsonResponse({"data": data})
 
-
+@login_required(login_url='user_login')
 def update_user_profile(request, user_id):
     first_name = request.POST.get('first_name')
     last_name = request.POST.get('last_name')
@@ -103,4 +103,8 @@ def update_user_profile(request, user_id):
 
     
     return JsonResponse({"data": True})
+
+
+def forgot_password(request):
+    return render(request, 'forgotpassword.html')
 

@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def index(request):
     post_list = Post.objects.all().order_by('-created_at')
 
-    paginator = Paginator(post_list, 10) 
+    paginator = Paginator(post_list, 12) 
 
     page = request.GET.get('page')
     try:

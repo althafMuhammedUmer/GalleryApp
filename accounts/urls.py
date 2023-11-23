@@ -7,4 +7,6 @@ urlpatterns = [
 
     path('get_user_details/<int:user_id>/', views.get_user_details, name="get_user_details"),
     path('update_user_profile/<int:user_id>/', views.update_user_profile, name="update_user_profile"),
+
+    path('forgot_password/', views.forgot_password, name="forgot_password"),
 ]
