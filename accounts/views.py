@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from app.views import index
 from django.http import JsonResponse
@@ -66,5 +66,13 @@ def user_logout(request):
 
 
 def get_user_details(request, user_id):
-    print(user_id, "userID")
-    return JsonResponse({"success": True})
+    user = get_object_or_404(CustomUser, pk=user_id)
+    data = {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "username": user.username,
+        "email": user.email,
+        "bio": user.userprofile.bio,
+    }
+
+    return JsonResponse({"data": data})

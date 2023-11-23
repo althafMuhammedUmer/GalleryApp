@@ -239,7 +239,7 @@
   <div class="head">
     <a href="/"><i class="fa-solid fa-circle-chevron-left"></i></a>
 
-    <div class="profile_container" id="profile_container" style="display: flex;">
+    <div class="profile_container" id="profile_container" style="display: flex">
       <img
         class="profile_pic"
         src="{{userprofile.profile_picture.url}}"
@@ -254,12 +254,17 @@
     <i class="fa-solid fa-gear"></i>
   </div>
   <div class="edit-profile-btn-section">
-    <div class="edit-profile-btn" id="edit-profile-btn" onclick="toggleEditProfileForm()">
+    <div
+      class="edit-profile-btn"
+      id="edit-profile-btn"
+      onclick="toggleEditProfileForm()"
+      data-user-id="{{user.id}}"
+    >
       <p>Edit profile</p>
       <i class="fa-regular fa-pen-to-square"></i>
     </div>
   </div>
-  <div class="edit-profile-form-section" id="profileForm" style="display: none;">
+  <div class="edit-profile-form-section" id="profileForm" style="display: none">
     <form action="" id="updateProfileForm">
       {% csrf_token %}
       <div class="form-container">
@@ -292,6 +297,7 @@
             type="text"
             class="form-control"
             name="first_name"
+            id="firstNameInput"
             placeholder="First Name"
           />
         </div>
@@ -300,6 +306,7 @@
             type="text"
             class="form-control"
             name="last_name"
+            id="lastNameInput"
             placeholder="Last Name"
           />
         </div>
@@ -308,6 +315,7 @@
             type="text"
             class="form-control"
             name="username"
+            id="usernameInput"
             placeholder="User Name"
           />
         </div>
@@ -316,6 +324,7 @@
             type="text"
             class="form-control"
             name="email"
+            id="emailInput"
             placeholder="Email"
           />
         </div>
@@ -324,6 +333,7 @@
             type="text"
             class="form-control"
             name="bio"
+            id="bioInput"
             placeholder="bio"
           />
         </div>
@@ -367,40 +377,56 @@
     dropdown.classList.toggle("show");
   }
   function toggleEditProfileForm() {
-
-    const profileForm = document.getElementById('profileForm')
-    profileForm.style.display = profileForm.style.display === "none" ? "block" : "none";
+    const profileForm = document.getElementById("profileForm");
+    profileForm.style.display =
+      profileForm.style.display === "none" ? "block" : "none";
     var profile_pic_section = document.querySelector(".profile_container");
 
-    const profile_container = document.getElementById('profile_container')
-    profile_container.style.display = profile_container.style.display === "flex" ? "none" : "flex";
-    
-  
+    const profile_container = document.getElementById("profile_container");
+    profile_container.style.display =
+      profile_container.style.display === "flex" ? "none" : "flex";
   }
 
   $(document).ready(function () {
     const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
-    $('#edit-profile-btn').click(function () {
-      
+    $("#edit-profile-btn").click(function () {
       console.log("loading user data....");
-    })
+      const userId = $(this).data("user-id");
 
-    
+      $.ajax({
+        url: `/get_user_details/${userId}/`,
+        method: "GET",
+        success: function (data) {
+          const userDetails = data.data;
 
+          // Populate form fields with user details
+          document.getElementById("firstNameInput").value =
+            userDetails.first_name;
+          document.getElementById("lastNameInput").value =
+            userDetails.last_name;
+          document.getElementById("usernameInput").value = userDetails.username;
+          document.getElementById("emailInput").value = userDetails.email;
+          document.getElementById("bioInput").value = userDetails.bio;
 
-    // $("#updateProfileForm").submit(function (e) {
-    //   e.preventDefault();
-    //   var formData = new FormData(this);
+        },
+        error: function (error) {
+          console.error("Error fetching data:", error);
+        },
+      });
+    });
 
-    //   var fileInput = document.getElementById("imageInput");
-    //   if (fileInput.files.length > 0) {
-        
-        
-    //   } else {
-    //     $("#message").text("Please select an image.");
-    //   }
-    // });
+    $("#updateProfileForm").submit(function (e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+
+      var fileInput = document.getElementById("imageInput");
+      if (fileInput.files.length > 0) {
+        console.log("form",formData);
+      } else {
+        $("#message").text("Please select an image.");
+      }
+    });
   });
 </script>
 {% endblock %}
