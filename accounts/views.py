@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, UserProfile
+from django.core.serializers import serialize
 
 from django.db import IntegrityError
 
@@ -76,3 +77,30 @@ def get_user_details(request, user_id):
     }
 
     return JsonResponse({"data": data})
+
+
+def update_user_profile(request, user_id):
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    bio = request.POST.get('bio')
+    image = request.FILES.get('image')
+
+    user = get_object_or_404(CustomUser, pk=user_id)
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.username = username
+    user.email = email
+    user.save()
+
+    userprofile = get_object_or_404(UserProfile, user=user)
+
+    userprofile.profile_picture =  image if request.FILES.get('image') else userprofile.profile_picture
+    userprofile.bio = bio
+    userprofile.save()
+
+    
+    return JsonResponse({"data": True})
+
