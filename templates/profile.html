@@ -131,7 +131,6 @@
     align-items: center;
   }
 
-
   .bookmarked {
     color: #ee9b00;
   }
@@ -198,7 +197,6 @@
   .edit-profile-form-section {
     border-radius: 4px;
     display: none;
-
     margin: 10px auto;
 
     min-height: 250px;
@@ -241,7 +239,7 @@
   <div class="head">
     <a href="/"><i class="fa-solid fa-circle-chevron-left"></i></a>
 
-    <div class="profile_container">
+    <div class="profile_container" id="profile_container" style="display: flex;">
       <img
         class="profile_pic"
         src="{{userprofile.profile_picture.url}}"
@@ -256,12 +254,12 @@
     <i class="fa-solid fa-gear"></i>
   </div>
   <div class="edit-profile-btn-section">
-    <div class="edit-profile-btn" onclick="toggleEditProfileForm()">
+    <div class="edit-profile-btn" id="edit-profile-btn" onclick="toggleEditProfileForm()">
       <p>Edit profile</p>
       <i class="fa-regular fa-pen-to-square"></i>
     </div>
   </div>
-  <div class="edit-profile-form-section">
+  <div class="edit-profile-form-section" id="profileForm" style="display: none;">
     <form action="" id="updateProfileForm">
       {% csrf_token %}
       <div class="form-container">
@@ -271,22 +269,22 @@
             src="{{userprofile.profile_picture.url}}"
             alt=""
           />
-          <div>
-            <label
-              for="imageInput"
-              class="file-label"
-              style="font-size: 14px; color: #669bbc"
-              >Edit Avatar</label
-            >
-            <input
-              type="file"
-              id="imageInput"
-              placeholder="update profile"
-              accept="image/*"
-              name="image"
-              class="file-input"
-            />
-          </div>
+        </div>
+        <div class="form-item-pic-update">
+          <label
+            for="imageInput"
+            class="file-label"
+            style="font-size: 14px; color: #669bbc; cursor: pointer"
+            >Edit Avatar</label
+          >
+          <input
+            type="file"
+            id="imageInput"
+            placeholder="update profile"
+            accept="image/*"
+            name="image"
+            class="file-input"
+          />
         </div>
 
         <div class="form-item2">
@@ -331,6 +329,7 @@
         </div>
         <button class="btn-submit btn">Save</button>
       </div>
+      <p class="message" id="message"></p>
     </form>
   </div>
 
@@ -359,6 +358,7 @@
     {% endfor %}
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% include 'includes/footer.html' %} {% endblock %} {% block custom_scripts %}
 <script>
   function toggleDropdown(icon) {
@@ -367,13 +367,40 @@
     dropdown.classList.toggle("show");
   }
   function toggleEditProfileForm() {
-    var formSection = document.querySelector(".edit-profile-form-section");
-    var profile_pic_section = document.querySelector(".profile_container");
-    formSection.style.display =
-      formSection.style.display === "none" ? "block" : "none";
 
-    profile_pic_section.style.display =
-      profile_pic_section.style.display === "flex" ? "none" : "flex";
+    const profileForm = document.getElementById('profileForm')
+    profileForm.style.display = profileForm.style.display === "none" ? "block" : "none";
+    var profile_pic_section = document.querySelector(".profile_container");
+
+    const profile_container = document.getElementById('profile_container')
+    profile_container.style.display = profile_container.style.display === "flex" ? "none" : "flex";
+    
+  
   }
+
+  $(document).ready(function () {
+    const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+    $('#edit-profile-btn').click(function () {
+      
+      console.log("loading user data....");
+    })
+
+    
+
+
+    // $("#updateProfileForm").submit(function (e) {
+    //   e.preventDefault();
+    //   var formData = new FormData(this);
+
+    //   var fileInput = document.getElementById("imageInput");
+    //   if (fileInput.files.length > 0) {
+        
+        
+    //   } else {
+    //     $("#message").text("Please select an image.");
+    //   }
+    // });
+  });
 </script>
 {% endblock %}

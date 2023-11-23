@@ -4,4 +4,6 @@ urlpatterns = [
     path('login/', views.user_login, name="user_login"),
     path('register/', views.register, name='register'),
     path("logout/", views.user_logout, name="user_logout"),
+
+    path('get_user_details/<int:user_id>/', views.get_user_details, name="get_user_details")
 ]

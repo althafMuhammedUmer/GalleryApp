@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from app.views import index
+from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, UserProfile
@@ -62,3 +63,8 @@ def register(request):
 def user_logout(request):
     logout(request)
     return redirect(user_login)
+
+
+def get_user_details(request, user_id):
+    print(user_id, "userID")
+    return JsonResponse({"success": True})
