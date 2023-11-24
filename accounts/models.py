@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+import random
 # Create your models here.
 class CustomUserManager(BaseUserManager):
 
@@ -74,5 +74,18 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to=profile_pic_upload_path, blank=True, null=True)
     bio = models.TextField(null=True)
     followers = models.ManyToManyField(CustomUser, related_name='following', blank=True)
+
+
+class OTP(models.Model):
+    user_contact = models.CharField(max_length=100)
+    otp_code = models.CharField(max_length=6)
+
+    @classmethod
+    def generate_otp(cls, user_contact):
+        otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+        obj, created = cls.objects.get_or_create(user_contact=user_contact)
+        obj.otp_code = otp
+        obj.save()
+        return otp
 
 
