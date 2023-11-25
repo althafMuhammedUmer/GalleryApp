@@ -125,30 +125,9 @@ def generate_otp(request):
     if request.method == "POST":
         user_contact = request.POST.get('user_contact')
         print(user_contact)
+        number = '+971' + str(user_contact)
 
-        otp = OTP.generate_otp(user_contact)
-        print(otp)
 
-        
-        TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
-        TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
-        TWILIO_PHONE_NUMBER = config('TWILIO_PHONE_NUMBER')
-
-        print(TWILIO_ACCOUNT_SID, TWILIO_PHONE_NUMBER, TWILIO_AUTH_TOKEN)
-
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-        message = client.messages.create(
-            from_=TWILIO_PHONE_NUMBER,
-            body=f"Your OTP is {otp}",
-            to=user_contact
-        )
-
-        print(message.sid)
-        # print(otp)
-
-        return JsonResponse({'otp send': True})
-        
         
         
     return JsonResponse({'error': "Invalid request."})
