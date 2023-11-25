@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('forgot_password/', views.forgot_password, name="forgot_password"),
     path('check_email_isExist/<str:email_id>/', views.check_email_isExist, name='check_email_isExist'),
+
+    path('generate_otp/', views.generate_otp, name='generate_otp'),
 ]

@@ -4,8 +4,10 @@ from app.views import index
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, UserProfile
+from .models import CustomUser, UserProfile, OTP
 from django.core.serializers import serialize
+from decouple import config
+from twilio.rest import Client
 
 from django.db import IntegrityError
 
@@ -117,4 +119,34 @@ def check_email_isExist(request, email_id):
         return JsonResponse({"exists": email_exist})
     
     return JsonResponse({"exists": False})
+
+def generate_otp(request):
+    if request.method == "POST":
+        user_contact = request.POST.get('user_contact')
+
+        otp = OTP.generate_otp(user_contact)
+
+        try:
+            TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+            TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
+            TWILIO_PHONE_NUMBER = config('TWILIO_PHONE_NUMBER')
+
+            client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+            message = client.messages.create(
+                body=f"Your OTP is {otp}",
+                from_=TWILIO_PHONE_NUMBER,
+                to=user_contact
+            )
+
+            print(message.sid)
+
+            return JsonResponse({'otp send': True})
+        
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+        
+    
+    return JsonResponse({'error': "Invalid request."})
+
 
