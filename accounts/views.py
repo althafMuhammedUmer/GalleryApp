@@ -8,7 +8,7 @@ from .models import CustomUser, UserProfile, OTP
 from django.core.serializers import serialize
 from decouple import config
 from twilio.rest import Client
-
+from accounts.sendmail import sendEmailMessage
 from django.db import IntegrityError
 
 # Create your views here.
@@ -114,7 +114,7 @@ def forgot_password(request):
 def check_email_isExist(request, email_id):
     if request.method == "GET":
         
-        email_exist = CustomUser.objects.filter(email=email_id).exists()
+        email_exist = CustomUser.objects.filter(email__iexact=email_id).exists()
 
         return JsonResponse({"exists": email_exist})
     
@@ -123,9 +123,9 @@ def check_email_isExist(request, email_id):
 def generate_otp(request):
 
     if request.method == "POST":
-        user_contact = request.POST.get('user_contact')
-        print(user_contact)
-        number = '+971' + str(user_contact)
+        email = request.POST.get('email')
+        print(email)
+        
 
 
         
