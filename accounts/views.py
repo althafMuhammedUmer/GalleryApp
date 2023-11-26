@@ -113,7 +113,7 @@ def forgot_password(request):
 
 def check_email_isExist(request, email_id):
     if request.method == "GET":
-        
+
         email_exist = CustomUser.objects.filter(email__iexact=email_id).exists()
 
         return JsonResponse({"exists": email_exist})
@@ -124,12 +124,17 @@ def generate_otp(request):
 
     if request.method == "POST":
         email = request.POST.get('email')
+        user = get_object_or_404(CustomUser, email__iexact=email)
+        username = user.username
+        company_name = 'picPlus+'
+        mail_subject = 'Verify your email'
+        otp = '123456'
+        print(user.username)
+        
         print(email)
-        
 
-
-        
-        
+        sendEmailMessage(username, email, otp, company_name, mail_subject)
+           
     return JsonResponse({'error': "Invalid request."})
 
 
