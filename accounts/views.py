@@ -10,7 +10,7 @@ from decouple import config
 from twilio.rest import Client
 from accounts.sendmail import sendEmailMessage
 from django.db import IntegrityError
-
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 def user_login(request):
@@ -42,10 +42,11 @@ def register(request):
         
         if password == confirm_password:
             try:
+                hashed_password = make_password(password)
                 user = CustomUser.objects.create(
                     username=username,
                     email=email,
-                    password=password,
+                    password=hashed_password,
                 )
                 user.save()
                 login(request, user)

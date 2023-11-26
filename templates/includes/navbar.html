@@ -30,7 +30,6 @@
   @media screen and (max-width: 480px) {
     .username-in-nav {
       display: none;
-      
     }
   }
 </style>
@@ -63,7 +62,13 @@
       </form>
     </div>
     <div class="username_nd_icon" onclick="openDropDown()">
-
+      {% if user.userprofile.profile_picture %}
+      <img
+        class="profile_pic"
+        src="{{user.userprofile.profile_picture.url}}"
+        alt=""
+      />
+      {% endif %}
 
       <p class="username-in-nav">{{user.username}}</p>
 
@@ -73,7 +78,13 @@
 </nav>
 <div id="dropDownModal" class="dropdown-content">
   <div class="user-details-container">
-
+    {% if user.userprofile.profile_picture %}
+    <img
+      class="profile_pic"
+      src="{{user.userprofile.profile_picture.url}}"
+      alt=""
+    />
+    {% endif %}
 
     <div class="user-details">
       <p>{{user.username}}</p>
