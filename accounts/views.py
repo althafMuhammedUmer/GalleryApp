@@ -39,7 +39,6 @@ def register(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
-        
         if password == confirm_password:
             try:
                 hashed_password = make_password(password)
