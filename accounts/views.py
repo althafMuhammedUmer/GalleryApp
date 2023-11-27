@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from app.views import index
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, UserProfile, OTP
@@ -11,6 +11,8 @@ from twilio.rest import Client
 from accounts.sendmail import sendEmailMessage
 from django.db import IntegrityError
 from django.contrib.auth.hashers import make_password
+from twilio.rest import Client
+
 # Create your views here.
 
 def user_login(request):
@@ -123,17 +125,47 @@ def check_email_isExist(request, email_id):
 def generate_otp(request):
 
     if request.method == "POST":
-        email = request.POST.get('email')
-        user = get_object_or_404(CustomUser, email__iexact=email)
-        username = user.username
-        company_name = 'picPlus+'
-        mail_subject = 'Verify your email'
-        otp = '123456'
-        print(user.username)
+        # email = request.POST.get('email')
+        # user = get_object_or_404(CustomUser, email__iexact=email)
+        # username = user.username
+        # company_name = 'picPlus+'
+        # mail_subject = 'Verify your email'
+        # otp = '123456'
+        # print(user.username)
         
-        print(email)
+        # print(email)
+        order_details = {
+            'amount': '5kg',
+            'item': 'nunu',
+            'date_of_delivery': '03/04/2021',
+            'address': 'No 1, Ciroma Chukwuma Adekunle Street, Ikeja, Lagos'
+        }
+        TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+        TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
+        TWILIO_SERVICE_SID = config('TWILIO_SERVICE_SID')
+        TWILIO_WHATSAPP = config('TWILIO_WHATSAPP')
 
-        sendEmailMessage(username, email, otp, company_name, mail_subject)
+
+
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+        number = request.POST.get('number')
+        number = '91' + str(number)
+        print(number)
+        message = client.messages.create(
+            from_=f'whatsapp:{TWILIO_WHATSAPP}',
+            body='Your {} order of {} has shipped and should be delivered on {}. Details: {}'.format(
+                order_details['amount'], order_details['item'], order_details['date_of_delivery'],
+                order_details['address']),
+            to='whatsapp:+{}'.format(number)
+        )
+
+        print(message.sid)
+        return HttpResponse('Great! Expect a message...')
+
+        # sendEmailMessage(username, email, otp, company_name, mail_subject)
            
     return JsonResponse({'error': "Invalid request."})
 
