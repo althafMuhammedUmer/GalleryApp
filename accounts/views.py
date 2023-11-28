@@ -136,7 +136,7 @@ def generate_otp(request):
         # print(email)
         order_details = {
             'amount': '5kg',
-            'item': 'nunu',
+            'item': 'f ck you',
             'date_of_delivery': '03/04/2021',
             'address': 'No 1, Ciroma Chukwuma Adekunle Street, Ikeja, Lagos'
         }
@@ -156,9 +156,7 @@ def generate_otp(request):
         print(number)
         message = client.messages.create(
             from_=f'whatsapp:{TWILIO_WHATSAPP}',
-            body='Your {} order of {} has shipped and should be delivered on {}. Details: {}'.format(
-                order_details['amount'], order_details['item'], order_details['date_of_delivery'],
-                order_details['address']),
+            body='',
             to='whatsapp:+{}'.format(number)
         )
 
