@@ -125,45 +125,17 @@ def check_email_isExist(request, email_id):
 def generate_otp(request):
 
     if request.method == "POST":
-        # email = request.POST.get('email')
-        # user = get_object_or_404(CustomUser, email__iexact=email)
-        # username = user.username
-        # company_name = 'picPlus+'
-        # mail_subject = 'Verify your email'
-        # otp = '123456'
-        # print(user.username)
+        email = request.POST.get('email')
+        user = get_object_or_404(CustomUser, email__iexact=email)
+        username = user.username
+        company_name = 'picPlus+'
+        mail_subject = 'Verify your email'
+        otp = '123456'
+        print(user.username)
         
-        # print(email)
-        order_details = {
-            'amount': '5kg',
-            'item': 'f ck you',
-            'date_of_delivery': '03/04/2021',
-            'address': 'No 1, Ciroma Chukwuma Adekunle Street, Ikeja, Lagos'
-        }
-        TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
-        TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
-        TWILIO_SERVICE_SID = config('TWILIO_SERVICE_SID')
-        TWILIO_WHATSAPP = config('TWILIO_WHATSAPP')
-
-
-
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-        number = request.POST.get('number')
-        number = '91' + str(number)
-        print(number)
-        message = client.messages.create(
-            from_=f'whatsapp:{TWILIO_WHATSAPP}',
-            body='',
-            to='whatsapp:+{}'.format(number)
-        )
-
-        print(message.sid)
-        return HttpResponse('Great! Expect a message...')
-
-        # sendEmailMessage(username, email, otp, company_name, mail_subject)
+        print(email)
+        
+        sendEmailMessage(username, email, otp, company_name, mail_subject)
            
     return JsonResponse({'error': "Invalid request."})
 
