@@ -130,10 +130,7 @@ def generate_otp(request):
         username = user.username
         company_name = 'picPlus+'
         mail_subject = 'Verify your email'
-        otp = '123456'
-        print(user.username)
-        
-        print(email)
+        otp = OTP.objects.create
         
         sendEmailMessage(username, email, otp, company_name, mail_subject)
            
