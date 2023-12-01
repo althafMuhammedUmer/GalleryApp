@@ -13,6 +13,7 @@ from django.db import IntegrityError
 from django.contrib.auth.hashers import make_password
 from twilio.rest import Client
 
+
 # Create your views here.
 
 def user_login(request):
@@ -130,9 +131,10 @@ def generate_otp(request):
         username = user.username
         company_name = 'picPlus+'
         mail_subject = 'Verify your email'
-        otp = OTP.objects.create
+        otp = OTP.objects.create(user_contact=email)
+        otp.save()
         
-        sendEmailMessage(username, email, otp, company_name, mail_subject)
+        sendEmailMessage(username, email, otp.otp_code, company_name, mail_subject)
            
     return JsonResponse({'error': "Invalid request."})
 
